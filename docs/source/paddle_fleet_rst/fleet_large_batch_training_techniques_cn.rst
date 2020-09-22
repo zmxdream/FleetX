@@ -95,9 +95,9 @@ Forward Recomputation Backpropagation
 
 .. code:: python
 
-    import fleetx as X
-    import paddle.fluid as fluid
-    import paddle.distributed.fleet as fleet
+   import fleetx as X
+   import paddle.fluid as fluid
+   import paddle.distributed.fleet as fleet
 
 定义分布式模式并初始化
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -106,14 +106,14 @@ Forward Recomputation Backpropagation
 
 .. code:: python
 
-    configs = X.parse_train_configs()
-    fleet.init(is_collective=True)
+   configs = X.parse_train_configs()
+   fleet.init(is_collective=True)
 
 加载模型及数据
 ^^^^^^^^^^^^^^
 
 用户可以通过\ ``X.applications``\ 接口加载我们预先定义好的模型，如：Resnet50、VGG16、BERT等。并使用定制化的data_loader加载模型，同时可以定义训练中使用的batch_size等参数。下面的例子中，我们使用了recompute对Bert_large模型所支持的最大Batch
-Size（130）来进行训练。
+Size（53）来进行训练。
 
 .. code:: python
 
@@ -123,7 +123,7 @@ Size（130）来进行训练。
        data_dir='./train_data',
        vocab_path='./vocab.txt',
        max_seq_len=512,
-       batch_size=130,
+       batch_size=53,
    )
 
 定义Recompute Strategy 及 Optimizer
@@ -158,8 +158,8 @@ Size（130）来进行训练。
 
 .. code:: python
 
-    trainer = X.MultiGPUTrainer()
-    trainer.fit(model, data_loader, epoch=10)
+   trainer = X.MultiGPUTrainer()
+   trainer.fit(model, data_loader, epoch=10)
 
 运行训练脚本
 ^^^^^^^^^^^^
@@ -173,16 +173,19 @@ Size（130）来进行训练。
 效果测试
 ^^^^^^^^
 
-我们在BERT模型上对recompute的效果进行了测试，使用Recompute后Batch size可以扩大9倍多。与混合精度一起使用时，Batch_size可以进一步扩大。其中，速度记录的是分布式训练任务每秒可以训练的样本数。
+我们在BERT模型上对recompute的效果进行了测试，使用Recompute后Batch
+size可以扩大至9倍多。与混合精度一起使用时，Batch_size可以进一步扩大。其中，速度记录的是分布式训练任务每秒可以训练的样本数。
 
+-  **Bert_large**:
 
-+--------------+----------------+-----------------+-------------------------------+
-| Model        | Baseline       | Recompute       | Recompute + mixed precision   |
-+==============+================+=================+===============================+
-| Batch size   | 14             | 130             | 145                           |
-+--------------+----------------+-----------------+-------------------------------+
-| speed        | 69.92 sents/s  | 45.76 sents/s   | 75.84 sents/s                 | 
-+--------------+----------------+-----------------+-------------------------------+
+========== ============= ============= ===========================
+Model      Baseline      Recompute     Recompute + mixed precision
+========== ============= ============= ===========================
+Batch size 14            130           145
+speed      69.92 sents/s 45.76 sents/s 75.84 sents/s
+========== ============= ============= ===========================
+
+.. _gradient-merge-1:
 
 Gradient Merge
 ~~~~~~~~~~~~~~

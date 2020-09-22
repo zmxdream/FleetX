@@ -64,11 +64,9 @@
 .. toctree::
    :maxdepth: 1
    :numbered:
-   :caption: 大规模场景应用案例
-   :name: applications
-
-   paddle_fleet_rst/fleet_from_training_to_serving_cn
-
+   :caption: 模型训练实战
+   :name: model-training
+   
 .. toctree::
    :maxdepth: 1
    :numbered:
